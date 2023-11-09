@@ -1,4 +1,4 @@
-import { JSBI, Pair, Percent } from 'spaceswap-sdk-zksync'
+import { JSBI, Pair, Percent} from 'spaceswap-sdk-zksync'
 import { darken } from 'polished'
 import React, { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'react-feather'
@@ -20,6 +20,7 @@ import CurrencyLogo from '../CurrencyLogo'
 import DoubleCurrencyLogo from '../DoubleLogo'
 import { AutoRow, RowBetween, RowFixed } from '../Row'
 import { Dots } from '../swap/styleds'
+import useUSDCPrice from '../../utils/useUSDCPrice'
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
@@ -40,7 +41,6 @@ interface PositionCardProps {
 
 export function MinimalPositionCard({ pair, showUnwrapped = false, border }: PositionCardProps) {
   const { account } = useActiveWeb3React()
-
   const currency0 = showUnwrapped ? pair.token0 : unwrappedToken(pair.token0)
   const currency1 = showUnwrapped ? pair.token1 : unwrappedToken(pair.token1)
 
@@ -48,7 +48,6 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
 
   const userPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
   const totalPoolTokens = useTotalSupply(pair.liquidityToken)
-
   const [token0Deposited, token1Deposited] =
     !!pair &&
     !!totalPoolTokens &&
@@ -125,15 +124,21 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
 
 export default function FullPositionCard({ pair, border }: PositionCardProps) {
   const { account } = useActiveWeb3React()
-
   const currency0 = unwrappedToken(pair.token0)
   const currency1 = unwrappedToken(pair.token1)
-
+  //@ts-ignore
+  const currency0_usdc_price = useUSDCPrice(currency0)
+  //@ts-ignore
+  const currency1_usdc_price = useUSDCPrice(currency1)
+  // console.log(pair.token0.symbol , currency0_usdc_price?.toSignificant(6) , pair.reserve0.toSignificant(6))
+  // console.log(pair.token1.symbol , currency1_usdc_price?.toSignificant(6) , pair.reserve1.toSignificant(6))
+  // //@ts-ignore
+  // console.log(pair.reserve0.multiply(currency0_usdc_price?.adjusted).add(pair.reserve0.multiply(currency1_usdc_price?.adjusted)).toSignificant(6));
+  //@ts-ignore
   const [showMore, setShowMore] = useState(false)
 
   const userPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
   const totalPoolTokens = useTotalSupply(pair.liquidityToken)
-
   const poolTokenPercentage =
     !!userPoolBalance && !!totalPoolTokens && JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
       ? new Percent(userPoolBalance.raw, totalPoolTokens.raw)
@@ -150,7 +155,6 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
           pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false)
         ]
       : [undefined, undefined]
-
   return (
     <HoverCard border={border}>
       <AutoColumn gap="12px">
@@ -159,6 +163,11 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
             <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} />
             <Text fontWeight={500} fontSize={20}>
               {!currency0 || !currency1 ? <Dots>Loading</Dots> : `${currency0.symbol}/${currency1.symbol}`}
+            </Text>
+          </RowFixed>
+          <RowFixed>
+            <Text fontWeight={500} fontSize={20}>
+              
             </Text>
           </RowFixed>
           <RowFixed>
@@ -174,7 +183,7 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
             <FixedHeightRow>
               <RowFixed>
                 <Text fontSize={16} fontWeight={500}>
-                  Pooled {currency0.symbol}:
+                  Pooled {currency0.symbol}: {totalPoolTokens?.toSignificant(4)}
                 </Text>
               </RowFixed>
               {token0Deposited ? (
@@ -242,3 +251,4 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
     </HoverCard>
   )
 }
+

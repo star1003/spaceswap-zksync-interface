@@ -208,9 +208,9 @@ export default function Header() {
   if(typeof(chainId) !== 'undefined' && account !== null && chainId === 9001){
     window.location.href = 'https://swap-evmos.spacefi.io'
   }
-  if(typeof(chainId) !== 'undefined' && account !== null && chainId === 280){
-    window.location.href = 'https://swap-zksynctest.spacefi.io'
-  }
+  // if(typeof(chainId) !== 'undefined' && account !== null && chainId === 280){
+  //   window.location.href = 'https://swap-zksynctest.spacefi.io'
+  // }
   if(typeof(chainId) !== 'undefined' && account !== null && chainId === 534353){
     window.location.href = 'https://swap-scroll-testnet.spacefi.io'
   }
@@ -253,6 +253,8 @@ export default function Header() {
           {!isMobile && <ExternalLink href='https://app.spacefi.io/#/points' target='_self' style={{ position: 'relative' }}> <BadgeTip>Live</BadgeTip> Points</ExternalLink>}
           {!isMobile &&  <TitleText>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TitleText>}
           {!isMobile && <ExternalLink href='https://app.spacefi.io' target='_self'> Back Home</ExternalLink>}
+          {!isMobile &&  <TitleText>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TitleText>}
+          {!isMobile && <ExternalLink href='/#/sspool' target='_self'> SSPool </ExternalLink>}
 
         </HeaderElement>
 

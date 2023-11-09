@@ -113,6 +113,7 @@ export default function Swap() {
         [Field.INPUT]: parsedAmount,
         [Field.OUTPUT]: parsedAmount
       }
+      
     : {
         [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
         [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount
@@ -321,7 +322,7 @@ export default function Swap() {
                 {recipient === null && !showWrap && isExpertMode ? (
                   <LinkStyledButton id="add-recipient-button" onClick={() => onChangeRecipient('')}>
                     + Add a send (optional)
-                  </LinkStyledButton>
+                  </LinkStyledButton> 
                 ) : null}
               </AutoRow>
             </AutoColumn>
@@ -349,7 +350,6 @@ export default function Swap() {
                 <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
               </>
             ) : null}
-
             {showWrap ? null : (
               <Card padding={'.25rem .75rem 0 .75rem'} borderRadius={'20px'}>
                 <AutoColumn gap="4px">

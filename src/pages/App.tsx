@@ -22,7 +22,7 @@ import RemoveLiquidity from './RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import Swap from './Swap'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
-
+import SSPool from './SSPool'
 const AppWrapper = styled.div`
   height: 100vh;
   display: flex;
@@ -95,6 +95,7 @@ export default function App() {
                 <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
                 <Route exact strict path="/migrate/v1" component={MigrateV1} />
                 <Route exact strict path="/migrate/v1/:address" component={MigrateV1Exchange} />
+                <Route exact stric path="/sspool" component={SSPool}/>
                 <Route component={RedirectPathToSwapOnly} />
               </Switch>
             </Web3ReactManager>
